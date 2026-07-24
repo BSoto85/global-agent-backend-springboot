@@ -2,7 +2,7 @@
 -- Run on first deploy by Render PostgreSQL service
 
 CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     uid VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     first_name VARCHAR(100),
@@ -13,16 +13,16 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS stats (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     xp INTEGER NOT NULL DEFAULT 0,
     games_played INTEGER NOT NULL DEFAULT 0,
     questions_correct INTEGER NOT NULL DEFAULT 0,
     questions_wrong INTEGER NOT NULL DEFAULT 0,
-    user_id INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE
+    user_id BIGINT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS countries (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     flag TEXT NOT NULL,
     country_code VARCHAR(2),
     name VARCHAR(30),
@@ -31,19 +31,19 @@ CREATE TABLE IF NOT EXISTS countries (
 );
 
 CREATE TABLE IF NOT EXISTS case_files (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     article_id INTEGER UNIQUE,
     article_content TEXT,
     article_title TEXT,
     publish_date VARCHAR(50),
     summary_young TEXT DEFAULT NULL,
     summary_old TEXT DEFAULT NULL,
-    countries_id INTEGER REFERENCES countries(id),
+    countries_id BIGINT REFERENCES countries(id),
     photo_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS questions_younger (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     y_question VARCHAR(150) NOT NULL,
     y_correct_answer VARCHAR(100) NOT NULL,
     y_incorrect_answer1 VARCHAR(100) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS questions_younger (
 );
 
 CREATE TABLE IF NOT EXISTS questions_older (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     o_question VARCHAR(150) NOT NULL,
     o_correct_answer VARCHAR(100) NOT NULL,
     o_incorrect_answer1 VARCHAR(100) NOT NULL,
@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS questions_older (
     o_case_files_article_id INTEGER NOT NULL REFERENCES case_files(article_id) ON DELETE CASCADE
 );
 
--- Seed countries
 INSERT INTO countries(name, flag, country_code, language_code, silhouette)
 VALUES
     ('Canada', 'https://res.cloudinary.com/dgifdj6nx/image/upload/c_scale,h_139,w_200/v1721233336/GlobalAgent-flagCanadaGif_f9bbfq.gif', 'ca', 'en', 'https://res.cloudinary.com/dgifdj6nx/image/upload/c_scale,h_390,w_390/v1723473096/GlobalAgent-Canada_x9mxgc.png'),
