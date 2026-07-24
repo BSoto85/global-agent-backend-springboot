@@ -59,7 +59,12 @@ public class AiQuestionService {
                     ANTHROPIC_API_URL, request, Map.class);
 
             String responseText = extractContent(response);
-            JsonNode root = objectMapper.readTree(responseText);
+            JsonNode root;
+            try {
+                root = objectMapper.readTree(responseText);
+            } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+                throw new RuntimeException("Failed to parse Claude response", e);
+            }
 
             CaseFile caseFile = caseFileRepository.findByArticleId(articleId)
                     .orElseThrow(() -> new RuntimeException("Case file not found: " + articleId));
