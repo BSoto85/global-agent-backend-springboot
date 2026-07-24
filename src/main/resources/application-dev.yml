@@ -1,0 +1,17 @@
+server:
+  port: 3003
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/global_agent
+    username: postgres
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    com.globalagent: DEBUG
+    org.hibernate.SQL: DEBUG

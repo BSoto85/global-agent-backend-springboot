@@ -1,0 +1,34 @@
+server:
+  port: ${PORT:3003}
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:global_agent}
+    username: ${PG_USER:postgres}
+    password: ${PG_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+firebase:
+  service-account: ${FIREBASE_SERVICE_ACCOUNT:}
+
+news-api:
+  base-url: ${BASE_URL:https://api.worldnewsapi.com/top-news}
+  api-key: ${NEWS_API_KEY:}
+
+anthropic:
+  api-key: ${ANTHROPIC_API_KEY:}
+
+google-cloud:
+  credentials-base64: ${GOOGLE_APPLICATION_CREDENTIALS_BASE64:}
+
+app:
+  digital-ocean-url: ${DIGITAL_OCEAN_URL:}
+  cron-timezone: America/New_York
