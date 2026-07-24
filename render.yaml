@@ -13,25 +13,15 @@ services:
       - key: PORT
         value: "3003"
       - key: PG_HOST
-        fromDatabase:
-          name: global-agent-db
-          property: host
+        sync: false
       - key: PG_PORT
-        fromDatabase:
-          name: global-agent-db
-          property: port
+        value: "5432"
       - key: PG_DATABASE
-        fromDatabase:
-          name: global-agent-db
-          property: database
+        value: "global_agent"
       - key: PG_USER
-        fromDatabase:
-          name: global-agent-db
-          property: user
+        sync: false
       - key: PG_PASSWORD
-        fromDatabase:
-          name: global-agent-db
-          property: password
+        sync: false
       - key: FIREBASE_SERVICE_ACCOUNT
         sync: false
       - key: NEWS_API_KEY
@@ -41,9 +31,3 @@ services:
       - key: GOOGLE_APPLICATION_CREDENTIALS_BASE64
         sync: false
     healthCheckPath: /
-
-  - type: postgres
-    name: global-agent-db
-    plan: free
-    databaseName: global_agent
-    initialSqlFile: src/main/resources/seed.sql
