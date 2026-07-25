@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS countries (
     id BIGSERIAL PRIMARY KEY,
     flag TEXT NOT NULL,
     country_code VARCHAR(2),
-    name VARCHAR(30),
+    name VARCHAR(30) UNIQUE,
     language_code VARCHAR(2),
     silhouette TEXT NOT NULL
 );
