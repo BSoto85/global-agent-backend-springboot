@@ -17,7 +17,7 @@ public class DtoMapper {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .dob(user.getDob())
+                .dob(user.getDob() != null ? user.getDob().toString() : null)
                 .photo(user.getPhoto())
                 .createdAt(user.getCreatedAt() != null ? user.getCreatedAt().format(FORMATTER) : null)
                 .build();
