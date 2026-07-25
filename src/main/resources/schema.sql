@@ -1,7 +1,7 @@
 -- Global Agent Database Schema
 -- PostgreSQL
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     uid VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE stats (
+CREATE TABLE IF NOT EXISTS stats (
     id BIGSERIAL PRIMARY KEY,
     xp INTEGER NOT NULL DEFAULT 0,
     games_played INTEGER NOT NULL DEFAULT 0,
@@ -21,7 +21,7 @@ CREATE TABLE stats (
     user_id BIGINT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE countries (
+CREATE TABLE IF NOT EXISTS countries (
     id BIGSERIAL PRIMARY KEY,
     flag TEXT NOT NULL,
     country_code VARCHAR(2),
@@ -30,7 +30,7 @@ CREATE TABLE countries (
     silhouette TEXT NOT NULL
 );
 
-CREATE TABLE case_files (
+CREATE TABLE IF NOT EXISTS case_files (
     id BIGSERIAL PRIMARY KEY,
     article_id INTEGER UNIQUE,
     article_content TEXT,
@@ -42,7 +42,7 @@ CREATE TABLE case_files (
     photo_url TEXT
 );
 
-CREATE TABLE questions_younger (
+CREATE TABLE IF NOT EXISTS questions_younger (
     id BIGSERIAL PRIMARY KEY,
     y_question VARCHAR(150) NOT NULL,
     y_correct_answer VARCHAR(100) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE questions_younger (
     y_case_files_article_id INTEGER NOT NULL REFERENCES case_files(article_id) ON DELETE CASCADE
 );
 
-CREATE TABLE questions_older (
+CREATE TABLE IF NOT EXISTS questions_older (
     id BIGSERIAL PRIMARY KEY,
     o_question VARCHAR(150) NOT NULL,
     o_correct_answer VARCHAR(100) NOT NULL,
