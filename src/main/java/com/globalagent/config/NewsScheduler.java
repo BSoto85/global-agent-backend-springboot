@@ -13,7 +13,7 @@ public class NewsScheduler {
 
     private final NewsPipelineService newsPipelineService;
 
-    @Scheduled(cron = "0 7 * * *", zone = "America/New_York")
+    @Scheduled(cron = "0 0 7 * * *", zone = "America/New_York")
     public void dailyNewsPipeline() {
         log.info("Cron triggered: starting daily news pipeline...");
         try {
