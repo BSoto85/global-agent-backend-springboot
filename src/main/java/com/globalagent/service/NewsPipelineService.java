@@ -125,4 +125,27 @@ public class NewsPipelineService {
         int totalProcessed = missingSummaries.size() + missingQuestions.size();
         return "Processed " + totalProcessed + " articles: " + summaryCount + " summaries, " + questionCount + " question sets. Errors: " + String.join(" | ", errors);
     }
+
+    public String cleanupMarkdownInSummaries() {
+        log.info("Cleaning up markdown in existing summaries...");
+        List<CaseFile> all = caseFileRepository.findAll();
+        int cleaned = 0;
+        for (CaseFile cf : all) {
+            boolean updated = false;
+            if (cf.getSummaryYoung() != null && cf.getSummaryYoung().contains("```")) {
+                cf.setSummaryYoung(cf.getSummaryYoung().replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim());
+                updated = true;
+            }
+            if (cf.getSummaryOld() != null && cf.getSummaryOld().contains("```")) {
+                cf.setSummaryOld(cf.getSummaryOld().replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim());
+                updated = true;
+            }
+            if (updated) {
+                caseFileRepository.save(cf);
+                cleaned++;
+            }
+        }
+        log.info("Cleaned {} summaries", cleaned);
+        return "Cleaned " + cleaned + " summaries";
+    }
 }

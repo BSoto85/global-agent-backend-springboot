@@ -50,6 +50,7 @@ public class AiSummaryService {
                     ANTHROPIC_API_URL, request, Map.class);
 
             String responseText = extractContent(response);
+            responseText = responseText.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
 
             caseFileRepository.findByArticleId(articleId).ifPresent(cf -> {
                 cf.setSummaryYoung(responseText);

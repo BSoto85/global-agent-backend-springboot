@@ -33,6 +33,12 @@ public class CaseFileController {
         return ResponseEntity.ok(Map.of("message", result));
     }
 
+    @GetMapping("/cleanup-summaries")
+    public ResponseEntity<Map<String, String>> cleanupSummaries() {
+        String result = newsPipelineService.cleanupMarkdownInSummaries();
+        return ResponseEntity.ok(Map.of("message", result));
+    }
+
     @GetMapping("/{countryId}")
     public ResponseEntity<List<CaseFileDto>> getCaseFilesByCountry(@PathVariable Long countryId) {
         return ResponseEntity.ok(caseFileService.getCaseFilesByCountry(countryId));
