@@ -32,6 +32,6 @@ public class QuestionOlder {
     private String incorrectAnswer3;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "o_case_files_article_id", nullable = false)
+    @JoinColumn(name = "o_case_files_article_id", nullable = false, referencedColumnName = "article_id")
     private CaseFile caseFile;
 }
