@@ -40,6 +40,10 @@ public class QuestionController {
 
     @GetMapping("/older_questions/by-article/{articleId}")
     public ResponseEntity<List<QuestionDto>> getOlderQuestionsByArticleId(@PathVariable Integer articleId) {
-        return ResponseEntity.ok(questionService.getOlderQuestionsByArticleId(articleId));
+        var caseFile = questionService.getCaseFileByArticleId(articleId);
+        if (caseFile.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+        return ResponseEntity.ok(questionService.getOlderQuestionsByCaseFileId(caseFile.get().getId()));
     }
 }

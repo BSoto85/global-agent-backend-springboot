@@ -1,6 +1,8 @@
 package com.globalagent.service;
 
 import com.globalagent.model.dto.QuestionDto;
+import com.globalagent.model.entity.CaseFile;
+import com.globalagent.repository.CaseFileRepository;
 import com.globalagent.repository.QuestionOlderRepository;
 import com.globalagent.repository.QuestionYoungerRepository;
 import com.globalagent.util.DtoMapper;
@@ -9,13 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final CaseFileRepository caseFileRepository;
     private final QuestionYoungerRepository youngerRepository;
     private final QuestionOlderRepository olderRepository;
+
+    @Transactional(readOnly = true)
+    public Optional<CaseFile> getCaseFileByArticleId(Integer articleId) {
+        return caseFileRepository.findByArticleId(articleId);
+    }
 
     @Transactional(readOnly = true)
     public List<QuestionDto> getAllYoungerQuestions() {
