@@ -32,7 +32,9 @@ public class ProfileService {
 
         if (request.getFirstName() != null) user.setFirstName(request.getFirstName());
         if (request.getLastName() != null) user.setLastName(request.getLastName());
-        if (request.getDob() != null) user.setDob(request.getDob());
+        if (request.getDob() != null && !request.getDob().isBlank()) {
+            user.setDob(LocalDate.parse(request.getDob()));
+        }
         if (request.getPhoto() != null) user.setPhoto(request.getPhoto());
 
         User saved = userRepository.save(user);
