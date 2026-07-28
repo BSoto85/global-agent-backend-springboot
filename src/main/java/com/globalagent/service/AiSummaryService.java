@@ -50,15 +50,15 @@ public class AiSummaryService {
                     ANTHROPIC_API_URL, request, Map.class);
 
             String responseText = extractContent(response);
-            responseText = responseText.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
+            String clean = responseText.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
 
             caseFileRepository.findByArticleId(articleId).ifPresent(cf -> {
-                cf.setSummaryYoung(responseText);
-                cf.setSummaryOld(responseText);
+                cf.setSummaryYoung(clean);
+                cf.setSummaryOld(clean);
                 caseFileRepository.save(cf);
             });
 
-            return new SummaryResult(responseText, responseText, articleId);
+            return new SummaryResult(clean, clean, articleId);
         } catch (Exception e) {
             log.error("Error generating summary for article {}: {}", articleId, e.getMessage(), e);
             throw new RuntimeException("Summary failed for article " + articleId + ": " + e.getMessage(), e);
