@@ -1,6 +1,8 @@
 package com.globalagent.service;
 
+import com.globalagent.model.entity.CaseFile;
 import com.globalagent.model.entity.Country;
+import com.globalagent.repository.CaseFileRepository;
 import com.globalagent.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import java.util.List;
 public class NewsPipelineService {
 
     private final CountryRepository countryRepository;
+    private final CaseFileRepository caseFileRepository;
     private final WorldNewsService worldNewsService;
     private final TranslationService translationService;
     private final CaseFileService caseFileService;
@@ -71,5 +74,35 @@ public class NewsPipelineService {
 
         log.info("World news pipeline completed successfully.");
         return "Added " + articles.size() + " articles, " + summaryCount + " summaries, " + questionCount + " question sets";
+    }
+
+    public String regenerateAiForExisting() {
+        log.info("Regenerating AI content for existing articles...");
+
+        List<CaseFile> missingSummaries = caseFileRepository.findBySummaryYoungIsNull();
+        log.info("Found {} articles missing summaries", missingSummaries.size());
+
+        int summaryCount = 0;
+        int questionCount = 0;
+
+        for (CaseFile cf : missingSummaries) {
+            try {
+                var summaryResult = aiSummaryService.generateSummary(cf.getArticleContent(), cf.getArticleId());
+                summaryCount++;
+
+                aiQuestionService.generateAndStoreQuestions(
+                        summaryResult.youngerSummary(),
+                        summaryResult.olderSummary(),
+                        cf.getArticleId());
+                questionCount++;
+
+                Thread.sleep(500);
+            } catch (Exception e) {
+                log.error("Error processing article {}: {}", cf.getArticleId(), e.getMessage());
+            }
+        }
+
+        log.info("Generated {} summaries and {} question sets", summaryCount, questionCount);
+        return "Processed " + missingSummaries.size() + " articles: " + summaryCount + " summaries, " + questionCount + " question sets";
     }
 }

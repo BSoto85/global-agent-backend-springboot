@@ -27,6 +27,12 @@ public class CaseFileController {
         return ResponseEntity.ok(Map.of("message", result));
     }
 
+    @GetMapping("/regenerate-ai")
+    public ResponseEntity<Map<String, String>> regenerateAi() {
+        String result = newsPipelineService.regenerateAiForExisting();
+        return ResponseEntity.ok(Map.of("message", result));
+    }
+
     @GetMapping("/{countryId}")
     public ResponseEntity<List<CaseFileDto>> getCaseFilesByCountry(@PathVariable Long countryId) {
         return ResponseEntity.ok(caseFileService.getCaseFilesByCountry(countryId));

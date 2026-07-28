@@ -19,4 +19,7 @@ public interface CaseFileRepository extends JpaRepository<CaseFile, Long> {
 
     @Query("SELECT cf FROM CaseFile cf ORDER BY cf.id DESC LIMIT 1")
     Optional<CaseFile> findLatest();
+
+    @Query("SELECT cf FROM CaseFile cf WHERE cf.summaryYoung IS NULL")
+    List<CaseFile> findBySummaryYoungIsNull();
 }
