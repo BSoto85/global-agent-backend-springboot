@@ -79,12 +79,12 @@ public class NewsPipelineService {
     public String regenerateAiForExisting() {
         log.info("Regenerating AI content for existing articles...");
 
-        List<CaseFile> missingSummaries = caseFileRepository.findBySummaryYoungIsNull();
-        log.info("Found {} articles missing summaries", missingSummaries.size());
-
         List<String> errors = new java.util.ArrayList<>();
         int summaryCount = 0;
         int questionCount = 0;
+
+        List<CaseFile> missingSummaries = caseFileRepository.findBySummaryYoungIsNull();
+        log.info("Found {} articles missing summaries", missingSummaries.size());
 
         for (CaseFile cf : missingSummaries) {
             try {
@@ -97,7 +97,6 @@ public class NewsPipelineService {
                         summaryResult.olderSummary(),
                         cf.getArticleId());
                 questionCount++;
-
                 Thread.sleep(3000);
             } catch (Exception e) {
                 log.error("Error processing article {}: {}", cf.getArticleId(), e.getMessage(), e);
@@ -105,7 +104,25 @@ public class NewsPipelineService {
             }
         }
 
+        List<CaseFile> missingQuestions = caseFileRepository.findBySummaryYoungIsNotNullAndYoungerQuestionsEmpty();
+        log.info("Found {} articles missing questions", missingQuestions.size());
+
+        for (CaseFile cf : missingQuestions) {
+            try {
+                aiQuestionService.generateAndStoreQuestions(
+                        cf.getSummaryYoung(),
+                        cf.getSummaryOld(),
+                        cf.getArticleId());
+                questionCount++;
+                Thread.sleep(3000);
+            } catch (Exception e) {
+                log.error("Error generating questions for article {}: {}", cf.getArticleId(), e.getMessage(), e);
+                errors.add("Article " + cf.getArticleId() + ": " + e.getMessage());
+            }
+        }
+
         log.info("Generated {} summaries and {} question sets", summaryCount, questionCount);
-        return "Processed " + missingSummaries.size() + " articles: " + summaryCount + " summaries, " + questionCount + " question sets. Errors: " + String.join(" | ", errors);
+        int totalProcessed = missingSummaries.size() + missingQuestions.size();
+        return "Processed " + totalProcessed + " articles: " + summaryCount + " summaries, " + questionCount + " question sets. Errors: " + String.join(" | ", errors);
     }
 }

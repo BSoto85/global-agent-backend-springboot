@@ -22,4 +22,7 @@ public interface CaseFileRepository extends JpaRepository<CaseFile, Long> {
 
     @Query("SELECT cf FROM CaseFile cf WHERE cf.summaryYoung IS NULL")
     List<CaseFile> findBySummaryYoungIsNull();
+
+    @Query("SELECT cf FROM CaseFile cf WHERE cf.summaryYoung IS NOT NULL AND cf.id NOT IN (SELECT qy.caseFile.id FROM QuestionYounger qy)")
+    List<CaseFile> findBySummaryYoungIsNotNullAndYoungerQuestionsEmpty();
 }
