@@ -32,7 +32,7 @@ public class User {
     @Column(name = "last_name", length = 100)
     private String lastName;
 
-    private String dob;
+    private LocalDate dob;
 
     @Column(columnDefinition = "TEXT")
     private String photo;
