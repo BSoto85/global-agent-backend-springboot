@@ -32,7 +32,7 @@ public class AiQuestionService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final String ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
-    private static final String MODEL = "claude-3-5-sonnet-20240620";
+    private static final String MODEL = "claude-sonnet-4-6";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public record QuestionResult(int articleId, int youngerCount, int olderCount) {}

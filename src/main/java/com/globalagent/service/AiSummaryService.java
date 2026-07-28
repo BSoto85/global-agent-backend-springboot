@@ -24,7 +24,7 @@ public class AiSummaryService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final String ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
-    private static final String MODEL = "claude-3-5-sonnet-20240620";
+    private static final String MODEL = "claude-sonnet-4-6";
 
     public record SummaryResult(String youngerSummary, String olderSummary, Integer articleId) {}
 
