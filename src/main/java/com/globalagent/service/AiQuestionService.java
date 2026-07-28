@@ -112,8 +112,8 @@ public class AiQuestionService {
 
             return new QuestionResult(articleId, youngerCount, olderCount);
         } catch (Exception e) {
-            log.error("Error generating questions for article {}: {}", articleId, e.getMessage());
-            throw e;
+            log.error("Error generating questions for article {}: {}", articleId, e.getMessage(), e);
+            throw new RuntimeException("Questions failed for article " + articleId + ": " + e.getMessage(), e);
         }
     }
 

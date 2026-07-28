@@ -59,8 +59,8 @@ public class AiSummaryService {
 
             return new SummaryResult(responseText, responseText, articleId);
         } catch (Exception e) {
-            log.error("Error generating summary for article {}: {}", articleId, e.getMessage());
-            throw e;
+            log.error("Error generating summary for article {}: {}", articleId, e.getMessage(), e);
+            throw new RuntimeException("Summary failed for article " + articleId + ": " + e.getMessage(), e);
         }
     }
 

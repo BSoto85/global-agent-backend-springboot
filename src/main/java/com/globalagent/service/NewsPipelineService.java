@@ -82,6 +82,7 @@ public class NewsPipelineService {
         List<CaseFile> missingSummaries = caseFileRepository.findBySummaryYoungIsNull();
         log.info("Found {} articles missing summaries", missingSummaries.size());
 
+        List<String> errors = new java.util.ArrayList<>();
         int summaryCount = 0;
         int questionCount = 0;
 
@@ -98,11 +99,12 @@ public class NewsPipelineService {
 
                 Thread.sleep(500);
             } catch (Exception e) {
-                log.error("Error processing article {}: {}", cf.getArticleId(), e.getMessage());
+                log.error("Error processing article {}: {}", cf.getArticleId(), e.getMessage(), e);
+                errors.add("Article " + cf.getArticleId() + ": " + e.getMessage());
             }
         }
 
         log.info("Generated {} summaries and {} question sets", summaryCount, questionCount);
-        return "Processed " + missingSummaries.size() + " articles: " + summaryCount + " summaries, " + questionCount + " question sets";
+        return "Processed " + missingSummaries.size() + " articles: " + summaryCount + " summaries, " + questionCount + " question sets. Errors: " + String.join(" | ", errors);
     }
 }
