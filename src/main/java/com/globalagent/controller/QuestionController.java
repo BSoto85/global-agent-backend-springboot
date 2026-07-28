@@ -37,4 +37,9 @@ public class QuestionController {
     public ResponseEntity<List<QuestionDto>> getOlderQuestionsByCaseFileId(@PathVariable Long caseFileId) {
         return ResponseEntity.ok(questionService.getOlderQuestionsByCaseFileId(caseFileId));
     }
+
+    @GetMapping("/older_questions/by-article/{articleId}")
+    public ResponseEntity<List<QuestionDto>> getOlderQuestionsByArticleId(@PathVariable Integer articleId) {
+        return ResponseEntity.ok(questionService.getOlderQuestionsByArticleId(articleId));
+    }
 }
