@@ -41,6 +41,11 @@ public class CaseFileService {
         Country country = countryRepository.findById(countryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found: " + countryId));
 
+        var existing = caseFileRepository.findByArticleId(articleId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+
         CaseFile caseFile = CaseFile.builder()
                 .country(country)
                 .articleId(articleId)
