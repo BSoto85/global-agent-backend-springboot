@@ -67,7 +67,12 @@ public class AiSummaryService {
     private String extractContent(ResponseEntity<Map> response) {
         if (response.getBody() == null) throw new RuntimeException("Empty response from Claude");
 
-        var content = (java.util.List<Map<String, String>>) response.getBody().get("content");
-        return content.get(0).get("text");
+        var content = (java.util.List<Map<String, Object>>) response.getBody().get("content");
+        for (Map<String, Object> block : content) {
+            if ("text".equals(block.get("type"))) {
+                return (String) block.get("text");
+            }
+        }
+        throw new RuntimeException("No text block in Claude response");
     }
 }

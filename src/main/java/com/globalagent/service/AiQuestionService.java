@@ -59,11 +59,12 @@ public class AiQuestionService {
                     ANTHROPIC_API_URL, request, Map.class);
 
             String responseText = extractContent(response);
+            responseText = responseText.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
             JsonNode root;
             try {
                 root = objectMapper.readTree(responseText);
             } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
-                throw new RuntimeException("Failed to parse Claude response", e);
+                throw new RuntimeException("Failed to parse Claude response. Raw: " + responseText, e);
             }
 
             CaseFile caseFile = caseFileRepository.findByArticleId(articleId)
@@ -119,7 +120,12 @@ public class AiQuestionService {
 
     private String extractContent(ResponseEntity<Map> response) {
         if (response.getBody() == null) throw new RuntimeException("Empty response from Claude");
-        var content = (java.util.List<Map<String, String>>) response.getBody().get("content");
-        return content.get(0).get("text");
+        var content = (java.util.List<Map<String, Object>>) response.getBody().get("content");
+        for (Map<String, Object> block : content) {
+            if ("text".equals(block.get("type"))) {
+                return (String) block.get("text");
+            }
+        }
+        throw new RuntimeException("No text block in Claude response");
     }
 }

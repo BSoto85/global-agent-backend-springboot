@@ -90,6 +90,7 @@ public class NewsPipelineService {
             try {
                 var summaryResult = aiSummaryService.generateSummary(cf.getArticleContent(), cf.getArticleId());
                 summaryCount++;
+                Thread.sleep(2000);
 
                 aiQuestionService.generateAndStoreQuestions(
                         summaryResult.youngerSummary(),
@@ -97,7 +98,7 @@ public class NewsPipelineService {
                         cf.getArticleId());
                 questionCount++;
 
-                Thread.sleep(500);
+                Thread.sleep(3000);
             } catch (Exception e) {
                 log.error("Error processing article {}: {}", cf.getArticleId(), e.getMessage(), e);
                 errors.add("Article " + cf.getArticleId() + ": " + e.getMessage());
