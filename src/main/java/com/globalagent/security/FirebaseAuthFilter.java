@@ -28,6 +28,12 @@ public class FirebaseAuthFilter implements Filter {
             return;
         }
 
+        String path = httpRequest.getRequestURI();
+        if (path.equals("/api/stats/leaderboard")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setContentType("application/json");
